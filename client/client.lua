@@ -13,33 +13,32 @@ RegisterCommand('sellcontraband', function(source)
     TriggerEvent('rsg-contraband:client:contrabandselling')
 end)
 
-RegisterNetEvent('police:SetCopCount', function(amount)
-    CurrentLawmen = amount
-end)
-
 RegisterNetEvent('rsg-contraband:client:contrabandselling', function()
-	QRCore.Functions.TriggerCallback('rsg-contraband:server:contrabandselling:getAvailableContraband', function(result)
-        if CurrentLawmen >= Config.MinimumLawmen then
-            if result ~= nil then
-                availableContraband = result
-                if not contrabandselling then
-                    contrabandselling = true
-                    LocalPlayer.state:set("inv_busy", true, true)
-					QRCore.Functions.Notify('started selling contraband', 'primary')
-                    startLocation = GetEntityCoords(PlayerPedId())
-                else
-                    contrabandselling = false
-                    LocalPlayer.state:set("inv_busy", false, true)
-					QRCore.Functions.Notify('stopped selling contraband', 'primary')
-                end
-            else
-				QRCore.Functions.Notify('no contraband to sell!', 'error')
-                LocalPlayer.state:set("inv_busy", false, true)
-            end
-        else
-			QRCore.Functions.Notify('not enough lawmen to sell!', 'error')
-        end
-    end)
+	QRCore.Functions.TriggerCallback('police:GetCops', function(lawmen)
+		CurrentLawmen = lawmen
+		if CurrentLawmen >= Config.MinimumLawmen then
+			QRCore.Functions.TriggerCallback('rsg-contraband:server:contrabandselling:getAvailableContraband', function(result)
+				if result ~= nil then
+					availableContraband = result
+					if not contrabandselling then
+						contrabandselling = true
+						LocalPlayer.state:set("inv_busy", true, true)
+						QRCore.Functions.Notify('started selling contraband', 'primary')
+						startLocation = GetEntityCoords(PlayerPedId())
+					else
+						contrabandselling = false
+						LocalPlayer.state:set("inv_busy", false, true)
+						QRCore.Functions.Notify('stopped selling contraband', 'primary')
+					end
+				else
+					QRCore.Functions.Notify('no contraband to sell!', 'error')
+					LocalPlayer.state:set("inv_busy", false, true)
+				end
+			end)
+		else
+			QRCore.Functions.Notify('not enough lawmen on duty!', 'error')
+		end
+	end)
 end)
 
 RegisterNetEvent('rsg-contraband:client:refreshAvailableContraband', function(items)
