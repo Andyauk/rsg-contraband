@@ -73,14 +73,3 @@ RegisterNetEvent('rsg-contraband:server:robContraband', function(item, amount)
         TriggerClientEvent('rsg-contraband:client:refreshAvailableContraband', src, AvailableContraband)
     end
 end)
-
-RegisterNetEvent('rsg-contraband:server:UpdateCurrentLawmen', function()
-    local amount = 0
-    local players = QRCore.Functions.GetQRPlayers()
-    for k, v in pairs(players) do
-        if v.PlayerData.job.name == Config.LawmenJob and v.PlayerData.job.onduty then
-            amount = amount + 1
-        end
-    end
-    TriggerClientEvent("rsg-contraband:client:SetLawmenCount", -1, amount)
-end)

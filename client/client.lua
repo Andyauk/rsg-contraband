@@ -7,11 +7,14 @@ local stealingPed = nil
 local stealData = {}
 local availableContraband = {}
 local currentOfferContraband = nil
-
-CurrentLawmen = 0
+local CurrentLawmen = 0
 
 RegisterCommand('sellcontraband', function(source)
     TriggerEvent('rsg-contraband:client:contrabandselling')
+end)
+
+RegisterNetEvent('police:SetCopCount', function(amount)
+    CurrentLawmen = amount
 end)
 
 RegisterNetEvent('rsg-contraband:client:contrabandselling', function()
@@ -37,11 +40,6 @@ RegisterNetEvent('rsg-contraband:client:contrabandselling', function()
 			QRCore.Functions.Notify('not enough lawmen to sell!', 'error')
         end
     end)
-end)
-
-RegisterNetEvent('rsg-contraband:client:SetLawmenCount', function(amount)
-    CurrentLawmen = amount
-	print(CurrentLawmen)
 end)
 
 RegisterNetEvent('rsg-contraband:client:refreshAvailableContraband', function(items)
@@ -101,7 +99,6 @@ local function SellToPed(ped)
         return
     elseif succesChance >= 19 then
 		local sellcoords = GetEntityCoords(PlayerPedId())
-		-- add alert to call police/lawmen
 		hasTarget = false
         return
     end
@@ -109,15 +106,16 @@ local function SellToPed(ped)
     local contrabandType = math.random(1, #availableContraband)
     local contrabandAmount = math.random(1, availableContraband[contrabandType].amount)
 
-    if contrabandAmount > 15 then
-        contrabandAmount = math.random(9, 15)
+    if contrabandAmount > 3 then
+        contrabandAmount = math.random(1, 3)
     end
+	
     currentOfferContraband = availableContraband[contrabandType]
 
     local ddata = Config.ContrabandPrice[currentOfferContraband.item]
     local randomPrice = math.random(ddata.min, ddata.max) * contrabandAmount
     if scamChance == 5 then
-       randomPrice = math.random(3, 10) * contrabandAmount
+       randomPrice = math.random(ddata.scammin, ddata.scammax) * contrabandAmount
     end
 
     SetEntityAsNoLongerNeeded(ped)
@@ -178,6 +176,10 @@ local function SellToPed(ped)
                     DrawText3D(pedCoords.x, pedCoords.y, pedCoords.z + 0.15, "[G] Confirm")
                     DrawText3D(pedCoords.x, pedCoords.y, pedCoords.z, "[B] Decline")
                     if IsControlJustPressed(0, 0x5415BE48) then
+						local randomNumber = math.random(1,100)
+						if randomNumber > 80 then -- 20% chance of calling the law
+							TriggerServerEvent('police:server:policeAlert', 'contraband being sold')
+						end
 						TriggerServerEvent('rsg-contraband:server:sellContraband', availableContraband[contrabandType].item, contrabandAmount, randomPrice)
 						hasTarget = false
 						-- animation here
