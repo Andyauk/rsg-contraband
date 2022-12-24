@@ -1,9 +1,9 @@
-local QRCore = exports['qr-core']:GetCoreObject()
+local RSGCore = exports['rsg-core']:GetCoreObject()
 
-QRCore.Functions.CreateCallback('rsg-contraband:server:contrabandselling:getAvailableContraband', function(source, cb)
+RSGCore.Functions.CreateCallback('rsg-contraband:server:contrabandselling:getAvailableContraband', function(source, cb)
     local AvailableContraband = {}
     local src = source
-    local Player = QRCore.Functions.GetPlayer(src)
+    local Player = RSGCore.Functions.GetPlayer(src)
     if Player then
         for i = 1, #Config.ContrabandList, 1 do
             local item = Player.Functions.GetItemByName(Config.ContrabandList[i])
@@ -12,7 +12,7 @@ QRCore.Functions.CreateCallback('rsg-contraband:server:contrabandselling:getAvai
                 AvailableContraband[#AvailableContraband+1] = {
                     item = item.name,
                     amount = item.amount,
-                    label = QRCore.Shared.Items[item.name]["label"]
+                    label = RSGCore.Shared.Items[item.name]["label"]
                 }
             end
         end
@@ -26,15 +26,15 @@ end)
 
 RegisterNetEvent('rsg-contraband:server:sellContraband', function(item, amount, price)
     local src = source
-    local Player = QRCore.Functions.GetPlayer(src)
+    local Player = RSGCore.Functions.GetPlayer(src)
     if Player then
         local hasItem = Player.Functions.GetItemByName(item)
         local AvailableContraband = {}
         if hasItem.amount >= amount then
-			TriggerClientEvent('QRCore:Notify', src, 'offer accepted', 'success')
+			TriggerClientEvent('RSGCore:Notify', src, 'offer accepted', 'success')
             Player.Functions.RemoveItem(item, amount)
             Player.Functions.AddMoney('cash', price, "sold-contraband")
-            TriggerClientEvent('inventory:client:ItemBox', src, QRCore.Shared.Items[item], "remove")
+            TriggerClientEvent('inventory:client:ItemBox', src, RSGCore.Shared.Items[item], "remove")
             for i = 1, #Config.ContrabandList, 1 do
                 item = Player.Functions.GetItemByName(Config.ContrabandList[i])
 
@@ -42,7 +42,7 @@ RegisterNetEvent('rsg-contraband:server:sellContraband', function(item, amount, 
                     AvailableContraband[#AvailableContraband+1] = {
                         item = item.name,
                         amount = item.amount,
-                        label = QRCore.Shared.Items[item.name]["label"]
+                        label = RSGCore.Shared.Items[item.name]["label"]
                     }
                 end
             end
@@ -55,18 +55,18 @@ end)
 
 RegisterNetEvent('rsg-contraband:server:robContraband', function(item, amount)
     local src = source
-    local Player = QRCore.Functions.GetPlayer(src)
+    local Player = RSGCore.Functions.GetPlayer(src)
     if Player then
         local AvailableContraband = {}
         Player.Functions.RemoveItem(item, amount)
-        TriggerClientEvent('inventory:client:ItemBox', src, QRCore.Shared.Items[item], "remove")
+        TriggerClientEvent('inventory:client:ItemBox', src, RSGCore.Shared.Items[item], "remove")
         for i = 1, #Config.ContrabandList, 1 do
             item = Player.Functions.GetItemByName(Config.ContrabandList[i])
             if item then
                 AvailableContraband[#AvailableContraband+1] = {
                     item = item.name,
                     amount = item.amount,
-                    label = QRCore.Shared.Items[item.name]["label"]
+                    label = RSGCore.Shared.Items[item.name]["label"]
                 }
             end
         end

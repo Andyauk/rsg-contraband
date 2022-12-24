@@ -1,4 +1,4 @@
-local QRCore = exports['qr-core']:GetCoreObject()
+local RSGCore = exports['rsg-core']:GetCoreObject()
 local contrabandselling = false
 local hasTarget = false
 local startLocation = nil
@@ -14,29 +14,29 @@ RegisterCommand('sellcontraband', function(source)
 end)
 
 RegisterNetEvent('rsg-contraband:client:contrabandselling', function()
-	QRCore.Functions.TriggerCallback('police:GetCops', function(lawmen)
+	RSGCore.Functions.TriggerCallback('police:GetCops', function(lawmen)
 		CurrentLawmen = lawmen
 		if CurrentLawmen >= Config.MinimumLawmen then
-			QRCore.Functions.TriggerCallback('rsg-contraband:server:contrabandselling:getAvailableContraband', function(result)
+			RSGCore.Functions.TriggerCallback('rsg-contraband:server:contrabandselling:getAvailableContraband', function(result)
 				if result ~= nil then
 					availableContraband = result
 					if not contrabandselling then
 						contrabandselling = true
 						LocalPlayer.state:set("inv_busy", true, true)
-						QRCore.Functions.Notify('started selling contraband', 'primary')
+						RSGCore.Functions.Notify('started selling contraband', 'primary')
 						startLocation = GetEntityCoords(PlayerPedId())
 					else
 						contrabandselling = false
 						LocalPlayer.state:set("inv_busy", false, true)
-						QRCore.Functions.Notify('stopped selling contraband', 'primary')
+						RSGCore.Functions.Notify('stopped selling contraband', 'primary')
 					end
 				else
-					QRCore.Functions.Notify('no contraband to sell!', 'error')
+					RSGCore.Functions.Notify('no contraband to sell!', 'error')
 					LocalPlayer.state:set("inv_busy", false, true)
 				end
 			end)
 		else
-			QRCore.Functions.Notify('not enough lawmen on duty!', 'error')
+			RSGCore.Functions.Notify('not enough lawmen on duty!', 'error')
 		end
 	end)
 end)
@@ -44,7 +44,7 @@ end)
 RegisterNetEvent('rsg-contraband:client:refreshAvailableContraband', function(items)
     availableContraband = items
     if #availableContraband <= 0 then
-		QRCore.Functions.Notify('no contraband left to sell!', 'error')
+		RSGCore.Functions.Notify('no contraband left to sell!', 'error')
         contrabandselling = false
         LocalPlayer.state:set("inv_busy", false, true)
     end
@@ -69,7 +69,7 @@ local function loadAnimDict(dict)
 end
 
 local function toFarAway()
-	QRCore.Functions.Notify('you moved too far away!', 'error')
+	RSGCore.Functions.Notify('you moved too far away!', 'error')
     LocalPlayer.state:set("inv_busy", false, true)
     contrabandselling = false
     hasTarget = false
@@ -155,7 +155,7 @@ local function SellToPed(ped)
             pedDist = #(coords - pedCoords)
             if getRobbed == 18 or getRobbed == 9 then
                 TriggerServerEvent('rsg-contraband:server:robContraband', availableContraband[contrabandType].item, contrabandAmount)
-				QRCore.Functions.Notify('you have been robbed!', 'primary')
+				RSGCore.Functions.Notify('you have been robbed!', 'primary')
                 stealingPed = ped
                 stealData = {
                     item = availableContraband[contrabandType].item,
@@ -191,7 +191,7 @@ local function SellToPed(ped)
                     end
 
                     if IsControlJustPressed(0, 0x4CC0E2FE) then
-						QRCore.Functions.Notify('offer declined', 'primary')
+						RSGCore.Functions.Notify('offer declined', 'primary')
                         hasTarget = false
                         SetPedKeepTask(ped, false)
                         SetEntityAsNoLongerNeeded(ped)
@@ -236,8 +236,8 @@ CreateThread(function()
                         TaskPlayAnim(ped, "pickup_object" ,"pickup_low" ,8.0, -8.0, -1, 1, 0, false, false, false )
                         Wait(2000)
                         ClearPedTasks(ped)
-                        TriggerServerEvent("QRCore:Server:AddItem", stealData.item, stealData.amount)
-                        TriggerEvent('inventory:client:ItemBox', QRCore.Shared.Items[stealData.item], "add")
+                        TriggerServerEvent("RSGCore:Server:AddItem", stealData.item, stealData.amount)
+                        TriggerEvent('inventory:client:ItemBox', RSGCore.Shared.Items[stealData.item], "add")
                         stealingPed = nil
                         stealData = {}
                     end
@@ -263,7 +263,7 @@ CreateThread(function()
                         PlayerPeds[#PlayerPeds+1] = ped
                     end
                 end
-                local closestPed, closestDistance = QRCore.Functions.GetClosestPed(coords, PlayerPeds)
+                local closestPed, closestDistance = RSGCore.Functions.GetClosestPed(coords, PlayerPeds)
                 if closestDistance < 15.0 and closestPed ~= 0 and not IsPedInAnyVehicle(closestPed) and GetPedType(closestPed) ~= 28 then
                     SellToPed(closestPed)
                 end
