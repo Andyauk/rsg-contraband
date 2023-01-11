@@ -6,15 +6,15 @@ author 'RexShack#3041'
 description 'rsg-contraband'
 
 client_scripts {
-  'client/client.lua',
+    'client/client.lua',
 }
 
 server_scripts {
-  'server/server.lua',
+    'server/server.lua',
 }
 
 shared_scripts {
-	'config.lua'
+    'config.lua'
 }
 
 dependency 'rsg-core'
