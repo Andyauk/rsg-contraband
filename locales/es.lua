@@ -1,24 +1,24 @@
 local Translations = {
     error = {
-		you_do_not_have_enough_blood_money_to_do_that = 'You do not have enough blood money to do that!',
-        you_do_not_have_any_blood_money = 'You do not have any blood money!',
-        you_do_not_have_enough_gold_bars = 'You do not have enough gold bars to do that!',
-        you_do_not_have_any_gold_bars = 'You do not have any gold bars!',
+		you_do_not_have_enough_blood_money_to_do_that = '¡No tienes suficiente dinero de sangre para hacer eso!',
+        you_do_not_have_any_blood_money = '¡No tienes dinero de sangre!',
+        you_do_not_have_enough_gold_bars = '¡No tienes suficientes lingotes de oro para hacer eso!',
+        you_do_not_have_any_gold_bars = '¡No tienes lingotes de oro!',
     },
     success = {
-		you_sold_money_for = 'You sold %{amount} blood money for $ %{totalcash}',
-        you_sold_gold_bars_for_totalcash = 'You sold %{amount} gold bars for $ %{totalcash}',
+		you_sold_money_for = 'Vendistes %{amount} dinero de sangre para $ %{totalcash}',
+        you_sold_gold_bars_for_totalcash = 'Vendistes %{amount} lingotes de oro para $ %{totalcash}',
     },
     primary = {
-        started_selling_contraband = 'started selling contraband',
+        started_selling_contraband = 'comenzó a vender contrabando',
     },
     menu = {
-		open = 'Open ',
-        outlaw_menu = '| Outlaw Menu |',
-        blood_money_wash = 'Blood Money Wash',
-        sell_gold_bars = 'Sell Gold Bars',
-        open_outlaw_shop = 'Open Outlaw Shop',
-        close_menu = 'Close Menu',
+		open = 'Abrir ',
+        outlaw_menu = '| Menú Outlaw |',
+        blood_money_wash = 'Lavado de dinero con sangre',
+        sell_gold_bars = 'Vender lingotes de oro',
+        open_outlaw_shop = 'Abrir tienda de Outlaw',
+        close_menu = 'Cerrar menú',
     },
     commands = {
 		var = 'text goes here',
@@ -27,14 +27,14 @@ local Translations = {
 		var = 'text goes here',
     },
     text = {
-        wash_the_blood_off_your_money = 'wash the blood off your money',
-        sell_your_gold_bars_here = 'sell your gold bars here',
-        buy_outlawed_items = 'buy outlawed items',
-        amount_to_wash = 'Amount to Wash ($)',
-        amount_of_bars = 'Amount of Bars',
+        wash_the_blood_off_your_money = 'lava la sangre de tu dinero',
+        sell_your_gold_bars_here = 'vende tus lingotes de oro aquí',
+        buy_outlawed_items = 'comprar artículos prohibidos',
+        amount_to_wash = 'Cantidad a lavar ($)',
+        amount_of_bars = 'Cantidad de barras',
     },
     label = {
-        outlaw_shop = 'Outlaw Shop',
+        outlaw_shop = 'Tienda de Outlaw',
     }
 }
 
