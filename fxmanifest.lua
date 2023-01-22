@@ -5,16 +5,19 @@ game 'rdr3'
 author 'RexShack#3041'
 description 'rsg-contraband'
 
+shared_scripts {
+    '@rsg-core/shared/locale.lua',
+    'locales/en.lua',
+    'locales/*.lua',
+    'config.lua',
+}
+
 client_scripts {
     'client/client.lua',
 }
 
 server_scripts {
     'server/server.lua',
-}
-
-shared_scripts {
-    'config.lua'
 }
 
 dependency 'rsg-core'
