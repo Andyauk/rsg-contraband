@@ -23,20 +23,20 @@ RegisterNetEvent('rsg-contraband:client:contrabandselling', function()
                     if not contrabandselling then
                         contrabandselling = true
                         LocalPlayer.state:set("inv_busy", true, true)
-                        RSGCore.Functions.Notify('started selling contraband', 'primary')
+                        RSGCore.Functions.Notify(Lang:t('primary.started_selling_contraband'), 'primary')
                         startLocation = GetEntityCoords(PlayerPedId())
                     else
                         contrabandselling = false
                         LocalPlayer.state:set("inv_busy", false, true)
-                        RSGCore.Functions.Notify('stopped selling contraband', 'primary')
+                        RSGCore.Functions.Notify(Lang:t('primary.stopped_selling_contraband'), 'primary')
                     end
                 else
-                    RSGCore.Functions.Notify('no contraband to sell!', 'error')
+                    RSGCore.Functions.Notify(Lang:t('error.no_contraband_sell'), 'error')
                     LocalPlayer.state:set("inv_busy", false, true)
                 end
             end)
         else
-            RSGCore.Functions.Notify('not enough lawmen on duty!', 'error')
+            RSGCore.Functions.Notify(Lang:t('error.not_enough_lawmen_duty'), 'error')
         end
     end)
 end)
@@ -44,7 +44,7 @@ end)
 RegisterNetEvent('rsg-contraband:client:refreshAvailableContraband', function(items)
     availableContraband = items
     if #availableContraband <= 0 then
-        RSGCore.Functions.Notify('no contraband left to sell!', 'error')
+        RSGCore.Functions.Notify(Lang:t('error.no_contraband_left_sell'), 'error')
         contrabandselling = false
         LocalPlayer.state:set("inv_busy", false, true)
     end
@@ -69,7 +69,7 @@ local function loadAnimDict(dict)
 end
 
 local function toFarAway()
-    RSGCore.Functions.Notify('you moved too far away!', 'error')
+    RSGCore.Functions.Notify(Lang:t('error.you_moved_too_far_away'), 'error')
     LocalPlayer.state:set("inv_busy", false, true)
     contrabandselling = false
     hasTarget = false
@@ -155,7 +155,7 @@ local function SellToPed(ped)
             pedDist = #(coords - pedCoords)
             if getRobbed == 18 or getRobbed == 9 then
                 TriggerServerEvent('rsg-contraband:server:robContraband', availableContraband[contrabandType].item, contrabandAmount)
-                RSGCore.Functions.Notify('you have been robbed!', 'primary')
+                RSGCore.Functions.Notify(Lang:t('primary.you_have_been_robbed'), 'primary')
                 stealingPed = ped
                 stealData = {
                     item = availableContraband[contrabandType].item,
@@ -171,13 +171,13 @@ local function SellToPed(ped)
                 break
             else
                 if pedDist < 1.5 and contrabandselling then
-                    DrawText3D(pedCoords.x, pedCoords.y, pedCoords.z + 0.3, "Sell "..contrabandAmount.." for $" .. randomPrice)
-                    DrawText3D(pedCoords.x, pedCoords.y, pedCoords.z + 0.15, "[G] Confirm")
-                    DrawText3D(pedCoords.x, pedCoords.y, pedCoords.z, "[B] Decline")
+                    DrawText3D(pedCoords.x, pedCoords.y, pedCoords.z + 0.3, Lang:t('menu.menu_sell')..contrabandAmount..Lang:t('menu.menu_for').. randomPrice)
+                    DrawText3D(pedCoords.x, pedCoords.y, pedCoords.z + 0.15, Lang:t('menu.menu_confirm'))
+                    DrawText3D(pedCoords.x, pedCoords.y, pedCoords.z, Lang:t('menu.menu_decline'))
                     if IsControlJustPressed(0, 0x5415BE48) then
-                        local randomNumber = math.random(1,100)
+                        local randomNumber = math.random(0.5,2)
                         if randomNumber > 80 then -- 20% chance of calling the law
-                            TriggerServerEvent('police:server:policeAlert', 'contraband being sold')
+                            TriggerServerEvent('police:server:policeAlert', Lang:t('alert.contraband_being_sold'))
                         end
                         TriggerServerEvent('rsg-contraband:server:sellContraband', availableContraband[contrabandType].item, contrabandAmount, randomPrice)
                         hasTarget = false
@@ -191,7 +191,7 @@ local function SellToPed(ped)
                     end
 
                     if IsControlJustPressed(0, 0x4CC0E2FE) then
-                        RSGCore.Functions.Notify('offer declined', 'primary')
+                        RSGCore.Functions.Notify(Lang:t('primary.offer_declined'), 'primary')
                         hasTarget = false
                         SetPedKeepTask(ped, false)
                         SetEntityAsNoLongerNeeded(ped)
@@ -227,7 +227,7 @@ CreateThread(function()
                 local pos = GetEntityCoords(ped)
                 local pedpos = GetEntityCoords(stealingPed)
                 if #(pos - pedpos) < 1.5 then
-                    DrawText3D(pedpos.x, pedpos.y, pedpos.z, Lang:t("info.pick_up_button"))
+                    DrawText3D(pedpos.x, pedpos.y, pedpos.z, Lang:t('menu.menu_remove_what_was_stolen'))
                     if IsControlJustPressed(0, 0x018C47CF) then
                         RequestAnimDict("pickup_object")
                         while not HasAnimDictLoaded("pickup_object") do

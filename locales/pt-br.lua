@@ -1,44 +1,37 @@
 local Translations = {
-error = {
-    you_do_not_have_enough_blood_money_to_do_that = 'Você não tem blood money suficiente para fazer isso!',
-    you_do_not_have_any_blood_money = 'Você não tem nenhum blood money!',
-    you_do_not_have_enough_gold_bars = 'Você não tem barras de ouro suficientes para fazer isso!',
-    you_do_not_have_any_gold_bars = 'Você não tem nenhuma barra de ouro!',
-},
-success = {
-    you_sold_money_for = 'Você vendeu %{amount} blood money por $ %{totalcash}',
-    you_sold_gold_bars_for_totalcash = 'Você vendeu %{amount} barras de ouro por $ %{totalcash}',
-},
-primary = {
-    started_selling_contraband = 'começou a vender contrabando',
-},
-menu = {
-    open = 'Abrir ',
-    outlaw_menu = '| Menu de Fora da Lei |',
-    blood_money_wash = 'Lavagem de Blood Money',
-    sell_gold_bars = 'Vender Barras de Ouro',
-    open_outlaw_shop = 'Abrir Loja de Fora da Lei',
-    close_menu = 'Fechar Menu',
-},
-commands = {
-    var = 'o texto vai aqui',
-},
-progressbar = {
-    var = 'o texto vai aqui',
-},
-text = {
-    wash_the_blood_off_your_money = 'lave o sangue do seu dinheiro',
-    sell_your_gold_bars_here = 'venda suas barras de ouro aqui',
-    buy_outlawed_items = 'compre itens proibidos',
-    amount_to_wash = 'Valor para lavar ($)',
-    amount_of_bars = 'Quantidade de Barras',
-},
-label = {
-    outlaw_shop = 'Loja de Fora da Lei',
-}
+    error = {
+        no_contraband_sell = 'nenhum contrabando para vender!',
+        not_enough_lawmen_duty = 'não há homens da lei suficientes em serviço!',
+        no_contraband_left_sell = 'não sobrou nenhum contrabando para vender!',
+        you_moved_too_far_away = 'você se mudou para muito longe!',
+    },
+    success = {
+        oferta_accepted = 'oferta aceita',
+    },
+    primary = {
+        start_selling_contraband = 'começou a vender contrabando',
+        you_have_been_robbed = 'você foi roubado!',
+        offer_declined = 'oferta recusada'
+    },
+    menu = {
+        menu_sell = 'Vender',
+        menu_for = 'para $',
+        menu_confirm = '[G] Confirmar',
+        menu_decline = '[B] Recusar',
+        menu_remove_what_was_stolen = '[E] para retirar o que foi roubado',
+    },
+    barra de progresso = {
+        var = 'o texto vai aqui',
+    },
+    alert = {
+        contraband_being_sold = 'se vende contrabando',
+    }
 }
 
-Lang = Locale:new({
-    phrases = Translations,
-    warnOnMissing = true
-})
+if GetConvar('rsg_locale', 'en') == 'pt-br' then
+    Lang = Locale:new({
+        phrases = Translations,
+        warnOnMissing = true,
+        fallbackLang = Lang,
+    })
+end
