@@ -20,7 +20,7 @@ local Translations = {
         menu_decline = '[B] Recusar',
         menu_remove_what_was_stolen = '[E] para retirar o que foi roubado',
     },
-    barra de progresso = {
+    progressbar = {
         var = 'o texto vai aqui',
     },
     alert = {
