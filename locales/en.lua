@@ -24,7 +24,7 @@ local Translations = {
         var = 'text goes here',
     },    
     alert = {
-        contraband_being_sold = 'se vende contrabando',
+        contraband_being_sold = 'contraband being sold',
     }
 }
 
