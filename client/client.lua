@@ -175,7 +175,7 @@ local function SellToPed(ped)
                     DrawText3D(pedCoords.x, pedCoords.y, pedCoords.z + 0.15, Lang:t('menu.menu_confirm'))
                     DrawText3D(pedCoords.x, pedCoords.y, pedCoords.z, Lang:t('menu.menu_decline'))
                     if IsControlJustPressed(0, 0x5415BE48) then
-                        local randomNumber = math.random(1,100)
+                        local randomNumber = math.random(1,25) -- change how much you get per bag
                         if randomNumber > 80 then -- 20% chance of calling the law
                             TriggerServerEvent('police:server:policeAlert', Lang:t('alert.contraband_being_sold'))
                         end
