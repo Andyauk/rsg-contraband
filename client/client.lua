@@ -14,7 +14,7 @@ RegisterCommand('sellcontraband', function(source)
 end)
 
 RegisterNetEvent('rsg-contraband:client:contrabandselling', function()
-    RSGCore.Functions.TriggerCallback('police:GetCops', function(lawmen)
+    RSGCore.Functions.TriggerCallback('rsg-lawman:server:getlaw', function(lawmen)
         CurrentLawmen = lawmen
         if CurrentLawmen >= Config.MinimumLawmen then
             RSGCore.Functions.TriggerCallback('rsg-contraband:server:contrabandselling:getAvailableContraband', function(result)
@@ -23,20 +23,20 @@ RegisterNetEvent('rsg-contraband:client:contrabandselling', function()
                     if not contrabandselling then
                         contrabandselling = true
                         LocalPlayer.state:set("inv_busy", true, true)
-                        RSGCore.Functions.Notify(Lang:t('primary.started_selling_contraband'), 'primary')
+                        lib.notify({ title = Lang:t('primary.started_selling_contraband'), type = 'inform', duration = 5000 })
                         startLocation = GetEntityCoords(PlayerPedId())
                     else
                         contrabandselling = false
                         LocalPlayer.state:set("inv_busy", false, true)
-                        RSGCore.Functions.Notify(Lang:t('primary.stopped_selling_contraband'), 'primary')
+                        lib.notify({ title = Lang:t('primary.stopped_selling_contraband'), type = 'inform', duration = 5000 })
                     end
                 else
-                    RSGCore.Functions.Notify(Lang:t('error.no_contraband_sell'), 'error')
+                    lib.notify({ title = Lang:t('error.no_contraband_sell'), type = 'error', duration = 5000 })
                     LocalPlayer.state:set("inv_busy", false, true)
                 end
             end)
         else
-            RSGCore.Functions.Notify(Lang:t('error.not_enough_lawmen_duty'), 'error')
+            lib.notify({ title = Lang:t('error.not_enough_lawmen_duty'), type = 'error', duration = 5000 })
         end
     end)
 end)
@@ -44,7 +44,7 @@ end)
 RegisterNetEvent('rsg-contraband:client:refreshAvailableContraband', function(items)
     availableContraband = items
     if #availableContraband <= 0 then
-        RSGCore.Functions.Notify(Lang:t('error.no_contraband_left_sell'), 'error')
+        lib.notify({ title = Lang:t('error.no_contraband_left_sell'), type = 'error', duration = 5000 })
         contrabandselling = false
         LocalPlayer.state:set("inv_busy", false, true)
     end
@@ -69,7 +69,7 @@ local function loadAnimDict(dict)
 end
 
 local function toFarAway()
-    RSGCore.Functions.Notify(Lang:t('error.you_moved_too_far_away'), 'error')
+    lib.notify({ title = Lang:t('error.you_moved_too_far_away'), type = 'error', duration = 5000 })
     LocalPlayer.state:set("inv_busy", false, true)
     contrabandselling = false
     hasTarget = false
@@ -155,7 +155,7 @@ local function SellToPed(ped)
             pedDist = #(coords - pedCoords)
             if getRobbed == 18 or getRobbed == 9 then
                 TriggerServerEvent('rsg-contraband:server:robContraband', availableContraband[contrabandType].item, contrabandAmount)
-                RSGCore.Functions.Notify(Lang:t('primary.you_have_been_robbed'), 'primary')
+                lib.notify({ title = Lang:t('primary.you_have_been_robbed'), type = 'inform', duration = 5000 })
                 stealingPed = ped
                 stealData = {
                     item = availableContraband[contrabandType].item,
@@ -177,7 +177,7 @@ local function SellToPed(ped)
                     if IsControlJustPressed(0, 0x5415BE48) then
                         local randomNumber = math.random(1,25) -- change how much you get per bag
                         if randomNumber > 80 then -- 20% chance of calling the law
-                            TriggerServerEvent('police:server:policeAlert', Lang:t('alert.contraband_being_sold'))
+                            TriggerServerEvent('rsg-lawman:server:lawmanAlert', Lang:t('alert.contraband_being_sold'))
                         end
                         TriggerServerEvent('rsg-contraband:server:sellContraband', availableContraband[contrabandType].item, contrabandAmount, randomPrice)
                         hasTarget = false
@@ -191,7 +191,7 @@ local function SellToPed(ped)
                     end
 
                     if IsControlJustPressed(0, 0x4CC0E2FE) then
-                        RSGCore.Functions.Notify(Lang:t('primary.offer_declined'), 'primary')
+                        lib.notify({ title = Lang:t('primary.offer_declined'), type = 'inform', duration = 5000 })
                         hasTarget = false
                         SetPedKeepTask(ped, false)
                         SetEntityAsNoLongerNeeded(ped)
